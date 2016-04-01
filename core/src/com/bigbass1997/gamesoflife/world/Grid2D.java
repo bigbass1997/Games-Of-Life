@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
+import com.bigbass1997.gamesoflife.rules.RuleSet;
 
 public class Grid2D {
 	
@@ -28,19 +29,23 @@ public class Grid2D {
 	    }
 	}
 	
+	public RuleSet ruleSet;
+	
 	public Vector2 pos, size;
 	public ArrayList<Cell2D> cells;
 	public ArrayList<ArrayList<Cell2D>> generations;
+	public int generationsCount = 0; //Temporary variable until the 'generations' log is implemented efficiently
 	
 	public ArrayList<Cell2D> tmpGen;
 	
 	public int cellsWide, cellsHigh;
 	
-	public Grid2D(float x, float y, float width, float height, int cellsWide, int cellsHigh){
-		this(new Vector2(x, y), new Vector2(width, height), cellsWide, cellsHigh);
+	public Grid2D(RuleSet ruleSet, float x, float y, float width, float height, int cellsWide, int cellsHigh){
+		this(ruleSet, new Vector2(x, y), new Vector2(width, height), cellsWide, cellsHigh);
 	}
 	
-	public Grid2D(Vector2 pos, Vector2 size, int cellsWide, int cellsHigh){
+	public Grid2D(RuleSet ruleSet, Vector2 pos, Vector2 size, int cellsWide, int cellsHigh){
+		this.ruleSet = ruleSet;
 		this.pos = pos;
 		this.size = size;
 		this.cellsWide = cellsWide;
@@ -75,6 +80,7 @@ public class Grid2D {
 	}
 	
 	public void stepGeneration(){
+		generationsCount++;
 		Cell2D[][] orderedGrid = new Cell2D[cellsWide][cellsHigh];
 		////Take "log" of last generation for history purposes
 		//ArrayList<Cell2D> lastGen = new ArrayList<Cell2D>();
@@ -93,7 +99,7 @@ public class Grid2D {
 			for(int j = 0; j < cellsHigh; j++){
 				Cell2D tmpCell = new Cell2D(pos.x, pos.y, i, j, xStep, yStep);
 				int liveNeighbors = getLiveNeighbors(orderedGrid[i][j], orderedGrid);
-				tmpCell.isAlive = checkCellForLife(liveNeighbors, orderedGrid[i][j].isAlive);
+				tmpCell.isAlive = ruleSet.checkCellForLife(liveNeighbors, orderedGrid[i][j].isAlive);
 				tmpGen.add(tmpCell);
 			}
 		}
@@ -115,31 +121,6 @@ public class Grid2D {
 	    }
 		
 		return neighbors;
-	}
-	
-	/**
-	 * 
-	 *  N N N
-	 *  N C N
-	 *  N N N
-	 *  
-	 *  1 2 3
-	 *  4 C 5
-	 *  6 7 8
-	 * 
-	 * @param neighbors
-	 * @return
-	 */
-	public boolean checkCellForLife(int neighbors, boolean isAlive){
-		if(isAlive){
-			if(neighbors < 2) return false; //under population
-			if(neighbors > 3) return false; //over population
-			if(neighbors == 2 || neighbors == 3) return true; //lives on
-		}else if(!isAlive){
-			if(neighbors == 3) return true; //reproduction
-		}
-		
-		return false;
 	}
 	
 	public void clean(){

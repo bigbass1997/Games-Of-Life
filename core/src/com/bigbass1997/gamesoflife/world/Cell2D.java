@@ -41,7 +41,7 @@ public class Cell2D extends Cell {
 	}
 	
 	public void render(ShapeRenderer sr){
-		sr.rect(xOffset + (xIndex * width), yOffset + (yIndex * height), width, height);
+		//sr.rect(xOffset + (xIndex * width), yOffset + (yIndex * height), width, height);
 		
 		if(isAlive){
 			ShapeType type = sr.getCurrentType();
@@ -53,6 +53,7 @@ public class Cell2D extends Cell {
 		}
 	}
 	
+	private boolean isReadyToToggle = true;
 	public void update(float delta){
 		posRef.x = xOffset + (xIndex * width);
 		posRef.y = yOffset + (yIndex * height);
@@ -60,6 +61,19 @@ public class Cell2D extends Cell {
 		Input input = Gdx.input;
 		float mx = input.getX();
 		float my = -input.getY() + Gdx.graphics.getHeight();
+		
+		if(input.isButtonPressed(0)){
+			if(mx > posRef.x && mx < posRef.x + width && my > posRef.y && my < posRef.y + height && isReadyToToggle){
+				isReadyToToggle = false;
+				if(isAlive){
+					isAlive = false;
+				}else if(!isAlive){
+					isAlive = true;
+				}
+			}
+		} else {
+			isReadyToToggle = true;
+		}
 		
 		if(input.isKeyJustPressed(Keys.P)){
 			if(mx > posRef.x && mx < posRef.x + width && my > posRef.y && my < posRef.y + height){

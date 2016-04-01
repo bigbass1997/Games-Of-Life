@@ -6,14 +6,19 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.bigbass1997.gamesoflife.world.Grid2D;
 import com.bigbass1997.gamesoflife.world.World;
+import com.bigbass1997.gamesoflife.rules.RuleSetConwayClassic;
+import com.bigbass1997.gamesoflife.skins.SkinManager;
 
 public class StateConway2D extends State {
 	
 	private ShapeRenderer sr;
 	
 	private Grid2D grid;
+	
+	private Label infoLabel; 
 	
 	public StateConway2D(String id){
 		super(id);
@@ -26,10 +31,13 @@ public class StateConway2D extends State {
         
 		stage = new Stage();
 		
+		infoLabel = new Label("", SkinManager.getSkin("fonts/computer.ttf", 24));
+		stage.addActor(infoLabel);
+		
 		sr = new ShapeRenderer(50000);
 		sr.setProjectionMatrix(cam.combined);
 		
-		grid = new Grid2D(0, 0, Gdx.graphics.getHeight()-1, Gdx.graphics.getHeight()-1, 16, 16);
+		grid = new Grid2D(new RuleSetConwayClassic(), 250, 0, Gdx.graphics.getHeight()-1, Gdx.graphics.getHeight()-1, 16, 16);
 	}
 	
 	@Override
@@ -76,6 +84,17 @@ public class StateConway2D extends State {
 		if(isDirty) grid.clean();
 		
 		if(input.isKeyPressed(Keys.SPACE)) grid.stepGeneration();
+		
+		String n = "\n";
+		String info = 
+				"Data:\n" +
+				"  GridSize: " + grid.cellsWide + " x " + grid.cellsHigh + n +
+				"  TotalCells: " + (grid.cellsWide * grid.cellsHigh) + n +
+				"  Generations: " + grid.generationsCount + n +
+				"  FPS: " + Gdx.graphics.getFramesPerSecond();
+		
+		infoLabel.setText(info);
+		infoLabel.setPosition(10, Gdx.graphics.getHeight() - (infoLabel.getPrefHeight() / 2) - 5);
 		
 		grid.update(delta);
 		world.update(delta);
