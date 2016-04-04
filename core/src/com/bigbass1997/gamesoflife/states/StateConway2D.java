@@ -9,7 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.bigbass1997.gamesoflife.world.Grid2D;
 import com.bigbass1997.gamesoflife.world.World;
-import com.bigbass1997.gamesoflife.rules.RuleSetConwayClassic;
+import com.bigbass1997.gamesoflife.rules.*;
 import com.bigbass1997.gamesoflife.skins.SkinManager;
 
 public class StateConway2D extends State {
@@ -37,7 +37,7 @@ public class StateConway2D extends State {
 		sr = new ShapeRenderer(50000);
 		sr.setProjectionMatrix(cam.combined);
 		
-		grid = new Grid2D(new RuleSetConwayClassic(), 250, 0, Gdx.graphics.getHeight()-1, Gdx.graphics.getHeight()-1, 16, 16);
+		grid = new Grid2D(new RuleSetExperimental(), 250, 0, Gdx.graphics.getHeight()-1, Gdx.graphics.getHeight()-1, 150, 150);
 	}
 	
 	@Override
@@ -81,7 +81,7 @@ public class StateConway2D extends State {
 			isDirty = true;
 		}
 		
-		if(isDirty) grid.clean();
+		if(isDirty || input.isKeyJustPressed(Keys.C)) grid.clean();
 		
 		if(input.isKeyPressed(Keys.SPACE)) grid.stepGeneration();
 		
