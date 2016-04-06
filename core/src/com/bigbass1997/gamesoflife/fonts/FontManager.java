@@ -17,7 +17,7 @@ public class FontManager {
 	 */
 	public static void addFont(String path, int[] sizes){
 		if(fonts == null) fonts = new Hashtable<String, Font>();
-		if(sizes == null || sizes.length == 0) sizes = new int[]{12, 16, 24, 32, 48};
+		if(sizes == null || sizes.length == 0) return;
 		
 		FileHandle file = Gdx.files.internal(path);
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(file);

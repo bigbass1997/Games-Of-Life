@@ -2,7 +2,6 @@ package com.bigbass1997.gamesoflife.world;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
@@ -13,6 +12,8 @@ public class Cell2D extends Cell {
 	public int xIndex, yIndex;
 	public int[] colors;
 	
+	public boolean isAlive = false;
+	
 	/**
 	 * To be used as only a reference. Assigning a new value, outside of this class' update(...) method, will not do anything.
 	 * 
@@ -20,7 +21,7 @@ public class Cell2D extends Cell {
 	 */
 	private Vector2 posRef;
 	
-	public boolean isAlive = false;
+	private boolean isReadyToToggle = true;
 	
 	public Cell2D(float xOffset, float yOffset, int xIndex, int yIndex, float width, float height){
 		this(xOffset, yOffset, xIndex, yIndex, width, height, new int[]{0xFFFFFFFF,0xFFFFFFFF,0xFFFFFFFF,0xFFFFFFFF});
@@ -53,7 +54,6 @@ public class Cell2D extends Cell {
 		}
 	}
 	
-	private boolean isReadyToToggle = true;
 	public void update(float delta){
 		posRef.x = xOffset + (xIndex * width);
 		posRef.y = yOffset + (yIndex * height);
@@ -73,16 +73,6 @@ public class Cell2D extends Cell {
 			}
 		} else {
 			isReadyToToggle = true;
-		}
-		
-		if(input.isKeyJustPressed(Keys.P)){
-			if(mx > posRef.x && mx < posRef.x + width && my > posRef.y && my < posRef.y + height){
-				if(isAlive){
-					isAlive = false;
-				}else if(!isAlive){
-					isAlive = true;
-				}
-			}
 		}
 	}
 	

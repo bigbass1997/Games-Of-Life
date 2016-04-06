@@ -37,7 +37,7 @@ public class StateConway2D extends State {
 		sr = new ShapeRenderer(50000);
 		sr.setProjectionMatrix(cam.combined);
 		
-		grid = new Grid2D(new RuleSetExperimental(), 250, 0, Gdx.graphics.getHeight()-1, Gdx.graphics.getHeight()-1, 150, 150);
+		grid = new Grid2D(new RuleSetConwayClassic(), 250, 0, Gdx.graphics.getHeight()-1, Gdx.graphics.getHeight()-1, 150, 150);
 	}
 	
 	@Override

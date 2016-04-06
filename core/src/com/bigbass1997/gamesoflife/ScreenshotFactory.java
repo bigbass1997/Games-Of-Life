@@ -26,7 +26,8 @@ public class ScreenshotFactory {
 			
             FileHandle fh = new FileHandle(filename);
             
-            int w = Gdx.graphics.getWidth(), h = Gdx.graphics.getHeight();
+            int w = Gdx.graphics.getWidth();
+            int h = Gdx.graphics.getHeight();
             
             Pixmap pixmap = ScreenUtils.getFrameBufferPixmap(0, 0, w, h);
             

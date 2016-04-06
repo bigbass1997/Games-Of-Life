@@ -30,12 +30,12 @@ public class StateManager {
 		return curState;
 	}
 	
-	public State getPreviousState(String id) throws Exception{
+	public State getPreviousState(String id){
 		for(State prevState : pastStates){
 			if(prevState.id.equals(id)) return prevState;
 		}
 		
-		throw new Exception("State ID not found!");
+		return null;
 	}
 	
 	public void render(){
