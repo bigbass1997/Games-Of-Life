@@ -24,6 +24,7 @@ public class State {
 	 * Any rendering should be done in this method.
 	 */
 	public void render() {
+		//render stuff
 	}
 	
 	/**
@@ -33,6 +34,7 @@ public class State {
 	 * @see {@link com.badlogic.gdx.Graphics#getDeltaTime()}
 	 */
 	public void update(float delta) {
+		//update stuff
 	}
 	
 	/**
@@ -40,5 +42,6 @@ public class State {
 	 * <p>Please use as needed in order to properly clear allocated assets to prevent memory leaks.</p>
 	 */
 	public void dispose() {
+		//dispose stuff
 	}
 }

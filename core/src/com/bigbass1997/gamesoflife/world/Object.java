@@ -114,11 +114,11 @@ public class Object {
 	}
 	
 	public void render(){
-		
+		//body can be added in subclasses
 	}
 	
 	public void update(float delta){
-		
+		//body can be added in subclasses
 	}
 	
 	public void dispose(){

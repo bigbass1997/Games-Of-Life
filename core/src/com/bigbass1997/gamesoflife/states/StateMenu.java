@@ -9,17 +9,11 @@ public class StateMenu extends State {
 	
 	@Override
 	public void render() {
-		
+		//TODO Add body
 	}
 
 	@Override
 	public void update(float delta) {
-		
+		//TODO Add body
 	}
-	
-	@Override
-	public void dispose() {
-		
-	}
-
 }
