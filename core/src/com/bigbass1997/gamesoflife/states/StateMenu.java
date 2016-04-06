@@ -18,13 +18,6 @@ public class StateMenu extends State {
 	}
 	
 	@Override
-	public State clone(){
-		State newState = new StateMenu(id);
-		
-		return newState;
-	}
-
-	@Override
 	public void dispose() {
 		
 	}
