@@ -1,3 +1,5 @@
+[![Codacy Badge](https://api.codacy.com/project/badge/grade/b69fdb2183d946268f8a3808c1d8b162)](https://www.codacy.com/app/bigbass1997-website/Games-Of-Life)
+
 _Games-Of-Life_
 ------
 __Description__  
