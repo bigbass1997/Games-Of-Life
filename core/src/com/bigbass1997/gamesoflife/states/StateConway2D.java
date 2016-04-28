@@ -35,9 +35,10 @@ public class StateConway2D extends State {
 		stage.addActor(infoLabel);
 		
 		sr = new ShapeRenderer(50000);
+		sr.setAutoShapeType(true);
 		sr.setProjectionMatrix(cam.combined);
 		
-		grid = new Grid2D(new RuleSetExperimental(), 250, 10, Gdx.graphics.getHeight()-20, Gdx.graphics.getHeight()-20, 3, 3);
+		grid = new Grid2D(new RuleSetTheStruggle(), 150, 5, 400, 400, 5, 5);
 	}
 	
 	@Override
@@ -51,6 +52,14 @@ public class StateConway2D extends State {
 	@Override
 	public void update(float delta) {
 		Input input = Gdx.input;
+		
+		if(input.isKeyJustPressed(Keys.G)){
+			if(grid.isDrawingGrid){
+				grid.isDrawingGrid = false;
+			} else {
+				grid.isDrawingGrid = true;
+			}
+		}
 		
 		boolean isDirty = false;
 		

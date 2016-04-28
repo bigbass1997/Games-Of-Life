@@ -2,6 +2,7 @@ package com.bigbass1997.gamesoflife.world;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
@@ -23,6 +24,8 @@ public class Cell2D extends Cell {
 	
 	private boolean isReadyToToggle = true;
 	
+	private final Color selectBoxColor = new Color(0xFFFF00FF);
+	
 	public Cell2D(float xOffset, float yOffset, int xIndex, int yIndex, float width, float height){
 		this(xOffset, yOffset, xIndex, yIndex, width, height, new int[]{0xFFFFFFFF,0xFFFFFFFF,0xFFFFFFFF,0xFFFFFFFF});
 	}
@@ -42,16 +45,23 @@ public class Cell2D extends Cell {
 	}
 	
 	public void render(ShapeRenderer sr){
-		//sr.rect(xOffset + (xIndex * width), yOffset + (yIndex * height), width, height);
-		
 		if(isAlive){
 			ShapeType type = sr.getCurrentType();
-			sr.end();
-			sr.begin(ShapeType.Filled);
+			sr.set(ShapeType.Filled);
 			sr.rect(xOffset + (xIndex * width), yOffset + (yIndex * height), width, height);
-			sr.end();
-			sr.begin(type);
+			sr.set(type);
 		}
+
+		Input input = Gdx.input;
+		float mx = input.getX();
+		float my = -input.getY() + Gdx.graphics.getHeight();
+		
+		ShapeType type = sr.getCurrentType();
+		sr.set(ShapeType.Filled);
+		if(mx >= posRef.x && mx <= posRef.x + width && my >= posRef.y && my <= posRef.y + height){
+			sr.rect(posRef.x, posRef.y, width, height, selectBoxColor, selectBoxColor, selectBoxColor, selectBoxColor);
+		}
+		sr.set(type);
 	}
 	
 	public void update(float delta){
@@ -63,7 +73,7 @@ public class Cell2D extends Cell {
 		float my = -input.getY() + Gdx.graphics.getHeight();
 		
 		if(input.isButtonPressed(0)){
-			if(mx > posRef.x && mx < posRef.x + width && my > posRef.y && my < posRef.y + height && isReadyToToggle){
+			if(mx >= posRef.x && mx <= posRef.x + width && my >= posRef.y && my <= posRef.y + height && isReadyToToggle){
 				isReadyToToggle = false;
 				if(isAlive){
 					isAlive = false;

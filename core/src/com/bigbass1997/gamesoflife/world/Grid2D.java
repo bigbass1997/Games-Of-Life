@@ -2,6 +2,7 @@ package com.bigbass1997.gamesoflife.world;
 
 import java.util.ArrayList;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
@@ -38,15 +39,17 @@ public class Grid2D {
 	
 	public ArrayList<Cell2D> tmpGen;
 	
-	private float cellWidth, cellHeight;
+	public boolean isDrawingGrid = true;
+	
+	private int cellWidth, cellHeight;
 	
 	private int cellsWide, cellsHigh;
 	
-	public Grid2D(RuleSet ruleSet, float x, float y, float width, float height, float cellWidth, float cellHeight){
+	public Grid2D(RuleSet ruleSet, float x, float y, float width, float height, int cellWidth, int cellHeight){
 		this(ruleSet, new Vector2(x, y), new Vector2(width, height), cellWidth, cellHeight);
 	}
 	
-	public Grid2D(RuleSet ruleSet, Vector2 pos, Vector2 size, float cellWidth, float cellHeight){
+	public Grid2D(RuleSet ruleSet, Vector2 pos, Vector2 size, int cellWidth, int cellHeight){
 		this.ruleSet = ruleSet;
 		this.pos = pos;
 		this.size = size;
@@ -70,11 +73,28 @@ public class Grid2D {
 	
 	public void render(ShapeRenderer sr){
 		sr.begin(ShapeType.Line);
-		sr.rect(pos.x, pos.y, size.x, size.y);
+		
+		if(isDrawingGrid){
+			drawGrid(sr);
+		}
+
+		sr.rect(pos.x, pos.y, cellsWide * cellWidth, cellsHigh * cellHeight);
+		
 		for(Cell2D cell : cells){
 			cell.render(sr);
 		}
 		sr.end();
+	}
+
+	public void drawGrid(ShapeRenderer sr){
+		Color c1 = new Color(0x402020FF);
+		Color c2 = new Color(0x402020FF);
+		for(int i = 1; i < cellsWide + 1; i++){
+			sr.line(pos.x + (i * cellWidth), pos.y, pos.x + (i * cellWidth), pos.y + (cellsHigh * cellHeight), c1, c2);
+		}
+		for(int j = 1; j < cellsHigh + 1; j++){
+			sr.line(pos.x, pos.y + (j * cellHeight), pos.x + (cellsWide * cellWidth), pos.y + (j * cellHeight), c1, c2);
+		}
 	}
 	
 	public void update(float delta){
