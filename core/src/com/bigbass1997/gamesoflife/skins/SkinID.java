@@ -1,16 +1,16 @@
 package com.bigbass1997.gamesoflife.skins;
 
-import com.bigbass1997.gamesoflife.fonts.FontID;
-
 public class SkinID {
 	
-	public FontID fontID;
+	public String fontPath;
+	public int size;
 	
-	public SkinID(FontID fontID){
-		this.fontID = fontID;
+	public SkinID(String fontPath, int size){
+		this.fontPath = fontPath;
+		this.size = size;
 	}
 	
 	public String toString(){
-		return "skin." + fontID.toString();
+		return "skin." + fontPath + String.valueOf(size);
 	}
 }

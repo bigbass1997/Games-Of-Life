@@ -7,8 +7,7 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.bigbass1997.gamesoflife.fonts.FontID;
-import com.bigbass1997.gamesoflife.fonts.FontManager;
+import com.bigbass1997.gdxfontmanager.FontManager;
 
 public class SkinManager {
 	
@@ -18,26 +17,26 @@ public class SkinManager {
 		if(skins == null) skins = new Hashtable<String, Skin>();
 		
 		if(skins.get(skinID.toString()) == null){
-			addSkin(skinID.fontID);
+			addSkin(skinID.fontPath, skinID.size);
 			return getSkin(skinID);
 		}
 		
 		return skins.get(skinID.toString());
 	}
 
-	public static Skin getSkin(String name, int size){
-		return getSkin(new SkinID(new FontID(name, size)));
+	public static Skin getSkin(String fontPath, int size){
+		return getSkin(new SkinID(fontPath, size));
 	}
 	
-	public static void addSkin(FontID fontID){
+	public static void addSkin(String fontPath, int size){
 		//TODO Allow specifying the path to the skin files.
 		Skin skin = new Skin();
-		skin.add("default-font", FontManager.getFont(fontID).font, BitmapFont.class);
+		skin.add("default-font", FontManager.getFont(fontPath, size).font, BitmapFont.class);
 		FileHandle fileHandle = Gdx.files.internal("skins/default/skin.json");
 		FileHandle atlasFile = Gdx.files.internal("skins/default/skin.atlas");
 		skin.addRegions(new TextureAtlas(atlasFile));
 		skin.load(fileHandle);
 		
-		skins.put(new SkinID(fontID).toString(), skin);
+		skins.put(new SkinID(fontPath, size).toString(), skin);
 	}
 }

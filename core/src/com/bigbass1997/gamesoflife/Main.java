@@ -6,9 +6,9 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.GL20;
 import com.bigbass1997.gamesoflife.ScreenshotFactory;
-import com.bigbass1997.gamesoflife.fonts.FontManager;
 import com.bigbass1997.gamesoflife.states.StateConway2D;
 import com.bigbass1997.gamesoflife.states.StateManager;
+import com.bigbass1997.gdxfontmanager.FontManager;
 
 public class Main extends ApplicationAdapter {
 	
@@ -18,7 +18,7 @@ public class Main extends ApplicationAdapter {
 	
 	@Override
 	public void create () {
-		FontManager.addFont("fonts/computer.ttf"); //Added font to be used with Debug Text
+		FontManager.addFont("fonts/computer.ttf", new int[]{16}); //Added font to be used with Debug Text
 		
 		stateManager = new StateManager(new StateConway2D("Conway2D"));
 	}

@@ -37,7 +37,7 @@ public class StateConway2D extends State {
 		sr = new ShapeRenderer(50000);
 		sr.setProjectionMatrix(cam.combined);
 		
-		grid = new Grid2D(new RuleSetConwayClassic(), 250, 0, Gdx.graphics.getHeight()-1, Gdx.graphics.getHeight()-1, 150, 150);
+		grid = new Grid2D(new RuleSetExperimental(), 250, 10, Gdx.graphics.getHeight()-20, Gdx.graphics.getHeight()-20, 3, 3);
 	}
 	
 	@Override
@@ -54,42 +54,35 @@ public class StateConway2D extends State {
 		
 		boolean isDirty = false;
 		
-		if(input.isKeyPressed(Keys.LEFT)){
-			grid.cellsWide -= 1;
+		if(input.isKeyJustPressed(Keys.LEFT)){
+			grid.modCellWidth(-1);
 			isDirty = true;
 		}
-		if(input.isKeyPressed(Keys.RIGHT)) {
-			grid.cellsWide += 1;
+		if(input.isKeyJustPressed(Keys.RIGHT)) {
+			grid.modCellWidth(1);
 			isDirty = true;
 		}
 
-		if(input.isKeyPressed(Keys.DOWN)){
-			grid.cellsHigh -= 1;
+		if(input.isKeyJustPressed(Keys.DOWN)){
+			grid.modCellHeight(-1);
 			isDirty = true;
 		}
-		if(input.isKeyPressed(Keys.UP)){
-			grid.cellsHigh += 1;
-			isDirty = true;
-		}
-		
-		if(grid.cellsWide <= 0){
-			grid.cellsWide = 1;
-			isDirty = true;
-		}
-		if(grid.cellsHigh <= 0){
-			grid.cellsHigh = 1;
+		if(input.isKeyJustPressed(Keys.UP)){
+			grid.modCellHeight(1);
 			isDirty = true;
 		}
 		
 		if(isDirty || input.isKeyJustPressed(Keys.C)) grid.clean();
 		
 		if(input.isKeyPressed(Keys.SPACE)) grid.stepGeneration();
+		if(input.isKeyJustPressed(Keys.S)) grid.stepGeneration();
 		
 		String n = "\n";
 		String info = 
 				"Data:\n" +
-				"  GridSize: " + grid.cellsWide + " x " + grid.cellsHigh + n +
-				"  TotalCells: " + (grid.cellsWide * grid.cellsHigh) + n +
+				"  GridSize: " + grid.getCellsWide() + " x " + grid.getCellsHigh() + n +
+				"  TotalCells: " + (grid.getCellsWide() * grid.getCellsHigh()) + n +
+				"  CellSize: " + grid.getCellWidth() + " x " + grid.getCellHeight() + n +
 				"  Generations: " + grid.generationsCount + n +
 				"  FPS: " + Gdx.graphics.getFramesPerSecond();
 		

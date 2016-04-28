@@ -38,27 +38,30 @@ public class Grid2D {
 	
 	public ArrayList<Cell2D> tmpGen;
 	
-	public int cellsWide, cellsHigh;
+	private float cellWidth, cellHeight;
 	
-	public Grid2D(RuleSet ruleSet, float x, float y, float width, float height, int cellsWide, int cellsHigh){
-		this(ruleSet, new Vector2(x, y), new Vector2(width, height), cellsWide, cellsHigh);
+	private int cellsWide, cellsHigh;
+	
+	public Grid2D(RuleSet ruleSet, float x, float y, float width, float height, float cellWidth, float cellHeight){
+		this(ruleSet, new Vector2(x, y), new Vector2(width, height), cellWidth, cellHeight);
 	}
 	
-	public Grid2D(RuleSet ruleSet, Vector2 pos, Vector2 size, int cellsWide, int cellsHigh){
+	public Grid2D(RuleSet ruleSet, Vector2 pos, Vector2 size, float cellWidth, float cellHeight){
 		this.ruleSet = ruleSet;
 		this.pos = pos;
 		this.size = size;
-		this.cellsWide = cellsWide;
-		this.cellsHigh = cellsHigh;
+		this.cellWidth = cellWidth;
+		this.cellHeight = cellHeight;
 		
 		cells = new ArrayList<Cell2D>();
 		generations = new ArrayList<ArrayList<Cell2D>>();
 		
-		float xStep = size.x / cellsWide;
-		float yStep = size.y / cellsHigh;
+		cellsWide = (int) (size.x / cellWidth);
+		cellsHigh = (int) (size.y / cellHeight);
+		
 		for(int i = 0; i < cellsWide; i++){
 			for(int j = 0; j < cellsHigh; j++){
-				cells.add(new Cell2D(pos.x, pos.y, i, j, xStep, yStep));
+				cells.add(new Cell2D(pos.x, pos.y, i, j, this.cellWidth, this.cellHeight));
 			}
 		}
 		
@@ -67,6 +70,7 @@ public class Grid2D {
 	
 	public void render(ShapeRenderer sr){
 		sr.begin(ShapeType.Line);
+		sr.rect(pos.x, pos.y, size.x, size.y);
 		for(Cell2D cell : cells){
 			cell.render(sr);
 		}
@@ -81,6 +85,7 @@ public class Grid2D {
 	
 	public void stepGeneration(){
 		generationsCount++;
+		
 		Cell2D[][] orderedGrid = new Cell2D[cellsWide][cellsHigh];
 		////Take "log" of last generation for history purposes
 		//ArrayList<Cell2D> lastGen = new ArrayList<Cell2D>();
@@ -93,11 +98,9 @@ public class Grid2D {
 		//Step each cell to new list of cells (new generation)
 		tmpGen.clear();
 		
-		float xStep = size.x / cellsWide;
-		float yStep = size.y / cellsHigh;
 		for(int i = 0; i < cellsWide; i++){
 			for(int j = 0; j < cellsHigh; j++){
-				Cell2D tmpCell = new Cell2D(pos.x, pos.y, i, j, xStep, yStep);
+				Cell2D tmpCell = new Cell2D(pos.x, pos.y, i, j, cellWidth, cellHeight);
 				int liveNeighbors = getLiveNeighbors(orderedGrid[i][j], orderedGrid);
 				tmpCell.isAlive = ruleSet.checkCellForLife(liveNeighbors, orderedGrid[i][j].isAlive);
 				tmpGen.add(tmpCell);
@@ -123,14 +126,41 @@ public class Grid2D {
 		return neighbors;
 	}
 	
+	public void modCellWidth(int dVal){
+		if((cellWidth + dVal) > 0){
+			cellWidth += dVal; //Change cellWidth
+			cellsWide = (int) (size.x / cellWidth); //Update grid size
+		}
+	}
+	
+	public void modCellHeight(int dVal){
+		if((cellHeight + dVal) > 0){
+			cellHeight += dVal; //Change cellHeight
+			cellsHigh = (int) (size.y / cellHeight); //Update grid size
+		}
+	}
+	
+	public float getCellWidth(){
+		return cellWidth;
+	}
+	public float getCellHeight(){
+		return cellHeight;
+	}
+	
+	public int getCellsWide(){
+		return cellsWide;
+	}
+	public int getCellsHigh(){
+		return cellsHigh;
+	}
+	
 	public void clean(){
 		cells.clear();
-		float xStep = size.x / cellsWide;
-		float yStep = size.y / cellsHigh;
 		for(int i = 0; i < cellsWide; i++){
 			for(int j = 0; j < cellsHigh; j++){
-				cells.add(new Cell2D(pos.x, pos.y, i, j, xStep, yStep));
+				cells.add(new Cell2D(pos.x, pos.y, i, j, cellWidth, cellHeight));
 			}
 		}
+		generationsCount = 0;
 	}
 }
