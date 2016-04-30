@@ -6,31 +6,11 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
-import com.bigbass1997.gamesoflife.rules.RuleSet;
+import com.bigbass1997.gamesoflife.rules.Rule;
 
 public class Grid2D {
 	
-	private enum Direction {
-		NORTHWEST(-1, 1),
-	    NORTH(0, 1),
-	    NORTHEAST(1, 1),
-	    EAST(1, 0),
-	    SOUTHEAST(1, -1),
-	    SOUTH(0, -1),
-	    SOUTHWEST(-1, -1),
-	    WEST(-1, 0)
-	    ;
-		
-	    final int dx;
-	    final int dy;
-
-	    Direction(int dx, int dy) {
-	        this.dx = dx;
-	        this.dy = dy;
-	    }
-	}
-	
-	public RuleSet ruleSet;
+	public Rule rule;
 	
 	public Vector2 pos, size;
 	public ArrayList<Cell2D> cells;
@@ -45,12 +25,12 @@ public class Grid2D {
 	
 	private int cellsWide, cellsHigh;
 	
-	public Grid2D(RuleSet ruleSet, float x, float y, float width, float height, int cellWidth, int cellHeight){
-		this(ruleSet, new Vector2(x, y), new Vector2(width, height), cellWidth, cellHeight);
+	public Grid2D(String formatRule, float x, float y, float width, float height, int cellWidth, int cellHeight){
+		this(formatRule, new Vector2(x, y), new Vector2(width, height), cellWidth, cellHeight);
 	}
 	
-	public Grid2D(RuleSet ruleSet, Vector2 pos, Vector2 size, int cellWidth, int cellHeight){
-		this.ruleSet = ruleSet;
+	public Grid2D(String formatRule, Vector2 pos, Vector2 size, int cellWidth, int cellHeight){
+		this.rule = new Rule(formatRule);
 		this.pos = pos;
 		this.size = size;
 		this.cellWidth = cellWidth;
@@ -107,43 +87,30 @@ public class Grid2D {
 		generationsCount++;
 		
 		Cell2D[][] orderedGrid = new Cell2D[cellsWide][cellsHigh];
-		////Take "log" of last generation for history purposes
-		//ArrayList<Cell2D> lastGen = new ArrayList<Cell2D>();
+		
 		for(Cell2D cell : cells){
-			//lastGen.add(cell.clone());
 			orderedGrid[cell.xIndex][cell.yIndex] = cell;
 		}
-		//generations.add(lastGen);
 		
-		//Step each cell to new list of cells (new generation)
 		tmpGen.clear();
 		
 		for(int i = 0; i < cellsWide; i++){
 			for(int j = 0; j < cellsHigh; j++){
 				Cell2D tmpCell = new Cell2D(pos.x, pos.y, i, j, cellWidth, cellHeight);
-				int liveNeighbors = getLiveNeighbors(orderedGrid[i][j], orderedGrid);
-				tmpCell.isAlive = ruleSet.checkCellForLife(liveNeighbors, orderedGrid[i][j].isAlive);
+				
+				//Create new cell & and decide if it should be alive or not in this next generation
+				
+				//neighbors based on parsed neighborhood setting
+				int liveNeighbors = rule.countLiveNeighbors(orderedGrid[i][j], orderedGrid, cellsWide, cellsHigh);
+				tmpCell.isAlive = rule.newStateOfCell(liveNeighbors, orderedGrid[i][j].isAlive);
+				
+				//------
+				
 				tmpGen.add(tmpCell);
 			}
 		}
 		
 		cells = tmpGen;
-	}
-	
-	public int getLiveNeighbors(Cell2D cell, Cell2D[][] grid){
-		int neighbors = 0;
-		int x = cell.xIndex;
-		int y = cell.yIndex;
-		
-		for (Direction direction : Direction.values()) {
-			try {
-		        if (grid[(x + direction.dx + cellsWide) % cellsWide][(y + direction.dy + cellsHigh) % cellsHigh].isAlive) {
-		            neighbors++;
-		        }
-			} catch(Exception e) {}
-	    }
-		
-		return neighbors;
 	}
 	
 	public void modCellWidth(int dVal){

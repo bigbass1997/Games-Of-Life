@@ -9,7 +9,6 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.bigbass1997.gamesoflife.world.Grid2D;
 import com.bigbass1997.gamesoflife.world.World;
-import com.bigbass1997.gamesoflife.rules.*;
 import com.bigbass1997.gamesoflife.skins.SkinManager;
 
 public class StateConway2D extends State {
@@ -38,7 +37,7 @@ public class StateConway2D extends State {
 		sr.setAutoShapeType(true);
 		sr.setProjectionMatrix(cam.combined);
 		
-		grid = new Grid2D(new RuleSetTheStruggle(), 150, 5, 400, 400, 5, 5);
+		grid = new Grid2D("R1,S2.3,B3.3,NM", 150, 5, 400, 400, 5, 5);
 	}
 	
 	@Override
